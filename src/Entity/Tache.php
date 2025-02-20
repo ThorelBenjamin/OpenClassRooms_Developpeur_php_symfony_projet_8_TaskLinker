@@ -17,10 +17,10 @@ class Tache
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deadline = null;
 
     public function getId(): ?int
@@ -45,7 +45,7 @@ class Tache
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -57,7 +57,7 @@ class Tache
         return $this->deadline;
     }
 
-    public function setDeadline(\DateTimeInterface $deadline): static
+    public function setDeadline(?\DateTimeInterface $deadline): static
     {
         $this->deadline = $deadline;
 

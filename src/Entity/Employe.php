@@ -84,7 +84,7 @@ class Employe
         return $this->role;
     }
 
-    public function setRole(int $role): static
+    public function setRole(?int $role): static
     {
         $this->role = $role;
 
