@@ -20,6 +20,14 @@ class Creneau
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fin = null;
 
+    #[ORM\ManyToOne(inversedBy: 'creneaux')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?employe $employe = null;
+
+    #[ORM\ManyToOne(inversedBy: 'crenaux')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?tache $tache = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +53,30 @@ class Creneau
     public function setFin(\DateTimeInterface $fin): static
     {
         $this->fin = $fin;
+
+        return $this;
+    }
+
+    public function getEmploye(): ?employe
+    {
+        return $this->employe;
+    }
+
+    public function setEmploye(?employe $employe): static
+    {
+        $this->employe = $employe;
+
+        return $this;
+    }
+
+    public function getTache(): ?tache
+    {
+        return $this->tache;
+    }
+
+    public function setTache(?tache $tache): static
+    {
+        $this->tache = $tache;
 
         return $this;
     }

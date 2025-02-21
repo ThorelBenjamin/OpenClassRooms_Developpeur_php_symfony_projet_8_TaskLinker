@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\EmployeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -37,6 +39,31 @@ class Employe
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Tache>
+     */
+    #[ORM\OneToMany(targetEntity: Tache::class, mappedBy: 'employe', orphanRemoval: true)]
+    private Collection $taches;
+
+    /**
+     * @var Collection<int, Creneau>
+     */
+    #[ORM\OneToMany(targetEntity: Creneau::class, mappedBy: 'employe', orphanRemoval: true)]
+    private Collection $creneaux;
+
+    /**
+     * @var Collection<int, projet>
+     */
+    #[ORM\ManyToMany(targetEntity: projet::class, inversedBy: 'employes')]
+    private Collection $projet;
+
+    public function __construct()
+    {
+        $this->taches = new ArrayCollection();
+        $this->creneaux = new ArrayCollection();
+        $this->projet = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +162,90 @@ class Employe
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Tache>
+     */
+    public function getTaches(): Collection
+    {
+        return $this->taches;
+    }
+
+    public function addTach(Tache $tach): static
+    {
+        if (!$this->taches->contains($tach)) {
+            $this->taches->add($tach);
+            $tach->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTach(Tache $tach): static
+    {
+        if ($this->taches->removeElement($tach)) {
+            // set the owning side to null (unless already changed)
+            if ($tach->getEmploye() === $this) {
+                $tach->setEmploye(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Creneau>
+     */
+    public function getCreneaux(): Collection
+    {
+        return $this->creneaux;
+    }
+
+    public function addCreneau(Creneau $creneau): static
+    {
+        if (!$this->creneaux->contains($creneau)) {
+            $this->creneaux->add($creneau);
+            $creneau->setEmploye($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreneau(Creneau $creneau): static
+    {
+        if ($this->creneaux->removeElement($creneau)) {
+            // set the owning side to null (unless already changed)
+            if ($creneau->getEmploye() === $this) {
+                $creneau->setEmploye(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, projet>
+     */
+    public function getProjet(): Collection
+    {
+        return $this->projet;
+    }
+
+    public function addProjet(projet $projet): static
+    {
+        if (!$this->projet->contains($projet)) {
+            $this->projet->add($projet);
+        }
+
+        return $this;
+    }
+
+    public function removeProjet(projet $projet): static
+    {
+        $this->projet->removeElement($projet);
 
         return $this;
     }
