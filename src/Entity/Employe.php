@@ -7,9 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: EmployeRepository::class)]
-class Employe
+class Employe implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -55,7 +57,7 @@ class Employe
     /**
      * @var Collection<int, projet>
      */
-    #[ORM\ManyToMany(targetEntity: projet::class, inversedBy: 'employes')]
+    #[ORM\ManyToMany(targetEntity: Projet::class, inversedBy: 'employes')]
     private Collection $projet;
 
     public function __construct()
@@ -78,7 +80,6 @@ class Employe
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
-
         return $this;
     }
 
@@ -90,7 +91,6 @@ class Employe
     public function setPrenom(string $prenom): static
     {
         $this->prenom = $prenom;
-
         return $this;
     }
 
@@ -102,7 +102,6 @@ class Employe
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -114,7 +113,6 @@ class Employe
     public function setRole(?int $role): static
     {
         $this->role = $role;
-
         return $this;
     }
 
@@ -126,7 +124,6 @@ class Employe
     public function setContrat(string $contrat): static
     {
         $this->contrat = $contrat;
-
         return $this;
     }
 
@@ -138,7 +135,6 @@ class Employe
     public function setDateArrivee(\DateTimeInterface $date_arrivee): static
     {
         $this->date_arrivee = $date_arrivee;
-
         return $this;
     }
 
@@ -150,7 +146,6 @@ class Employe
     public function setActif(int $actif): static
     {
         $this->actif = $actif;
-
         return $this;
     }
 
@@ -162,8 +157,23 @@ class Employe
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
+    }
+
+    // Méthodes de l'interface UserInterface
+    public function getRoles(): array
+    {
+        return [$this->role]; // Retourne un tableau avec les rôles de l'utilisateur
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email; // Utilisez l'email comme identifiant
+    }
+
+    public function eraseCredentials(): void
+    {
+        // Si vous stockez des données sensibles, cela devrait les effacer ici
     }
 
     /**
@@ -180,7 +190,6 @@ class Employe
             $this->taches->add($tach);
             $tach->setEmploye($this);
         }
-
         return $this;
     }
 
@@ -192,7 +201,6 @@ class Employe
                 $tach->setEmploye(null);
             }
         }
-
         return $this;
     }
 
@@ -210,7 +218,6 @@ class Employe
             $this->creneaux->add($creneau);
             $creneau->setEmploye($this);
         }
-
         return $this;
     }
 
@@ -222,7 +229,6 @@ class Employe
                 $creneau->setEmploye(null);
             }
         }
-
         return $this;
     }
 
@@ -234,19 +240,20 @@ class Employe
         return $this->projet;
     }
 
-    public function addProjet(projet $projet): static
+    public function addProjet(Projet $projet): static
     {
         if (!$this->projet->contains($projet)) {
             $this->projet->add($projet);
+            $projet->addEmploye($this);
         }
-
         return $this;
     }
 
-    public function removeProjet(projet $projet): static
+    public function removeProjet(Projet $projet): static
     {
-        $this->projet->removeElement($projet);
-
+        if ($this->projet->removeElement($projet)) {
+            $projet->removeEmploye($this);
+        }
         return $this;
     }
 }
