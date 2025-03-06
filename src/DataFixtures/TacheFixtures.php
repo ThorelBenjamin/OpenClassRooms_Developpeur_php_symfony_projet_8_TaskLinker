@@ -17,20 +17,29 @@ class TacheFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $projets = $manager->getRepository(Projet::class)->findAll();
         $etiquettes = $manager->getRepository(Etiquette::class)->findAll();
 
         for ($i = 0; $i < 20; $i++) {
             $tache = new Tache();
+
+            // Récupérer un projet au hasard
+            $projetIndex = mt_rand(0, 4);
+            $projet = $this->getReference("projet_" . $projetIndex, Projet::class);
+
+            // Récupérer un statut au hasard pour ce projet
+            $statutIndex = mt_rand(0, 2);
+            $statut = $this->getReference("statut_{$projetIndex}_{$statutIndex}", Statut::class);
+
             $tache->setTitre($faker->sentence(3))
                 ->setDescription($faker->paragraph(2))
                 ->setDeadline($faker->optional(0.7)->dateTimeBetween('now', '+1 year'))
                 ->setEmploye($this->getReference("employe_" . mt_rand(0, 9), Employe::class))
-                ->setProjet($this->getReference("projet_" . mt_rand(0, 4), Projet::class))
-                ->setStatut($this->getReference("statut_" . mt_rand(0, 2), Statut::class));
+                ->setProjet($projet)
+                ->setStatut($statut);
 
+            // Ajouter des étiquettes aléatoires
             for ($j = 0; $j < mt_rand(1, 3); $j++) {
-                if (count($etiquettes) > 0) {
+                if (!empty($etiquettes)) {
                     $tache->addEtiquette($etiquettes[array_rand($etiquettes)]);
                 }
             }

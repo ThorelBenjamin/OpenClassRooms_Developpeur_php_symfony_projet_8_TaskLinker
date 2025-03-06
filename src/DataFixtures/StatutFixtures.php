@@ -15,16 +15,17 @@ class StatutFixtures extends Fixture implements DependentFixtureInterface
         $projets = $manager->getRepository(Projet::class)->findAll();
         $statuts = ['À faire', 'En cours', 'Terminé'];
 
-        foreach ($statuts as $index => $libelle) {
-            $statut = new Statut();
-            $statut->setLibelle($libelle);
+        foreach ($projets as $projetIndex => $projet) {
+            foreach ($statuts as $statutIndex => $libelle) {
+                $statut = new Statut();
+                $statut->setLibelle($libelle);
+                $statut->setProjet($projet);
 
-            if (count($projets) > 0) {
-                $statut->setProjet($projets[array_rand($projets)]);
+                $manager->persist($statut);
+
+                // Ajouter une référence unique pour chaque statut de chaque projet
+                $this->addReference("statut_{$projetIndex}_{$statutIndex}", $statut);
             }
-
-            $manager->persist($statut);
-            $this->addReference("statut_" . $index, $statut);
         }
 
         $manager->flush();

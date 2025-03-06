@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <div id="content">
+        <div id="projects-container">
+
+            {%for projets in projet %}
+                <article class="card-project">
+                    <a href="{{ path('projet.show', {id: projets.id}) }}">
+                        <h2>{{ projets.nom }}</h2>
+                    </a>
+                    <div class="card-project-icons">
+                        <a href="#"><i class="fa-solid fa-pen"></i></a>
+                        <a href="#"><i class="fa-solid fa-trash"></i></a>
+                    </div>
+                </article>
+            {% else %}
+                <p>Aucune taches en base de données</p>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

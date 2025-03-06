@@ -35,7 +35,7 @@ class Tache
 
     #[ORM\ManyToOne(inversedBy: 'taches')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?employe $employe = null;
+    private ?Employe $employe = null;
 
     /**
      * @var Collection<int, Creneau>
