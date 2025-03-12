@@ -20,7 +20,7 @@ class Statut
 
     #[ORM\ManyToOne(inversedBy: 'statuts')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?projet $projet = null;
+    private ?Projet $projet = null;
 
     /**
      * @var Collection<int, Tache>

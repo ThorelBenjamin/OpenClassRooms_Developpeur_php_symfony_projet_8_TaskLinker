@@ -13,7 +13,7 @@ class StatutFixtures extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         $projets = $manager->getRepository(Projet::class)->findAll();
-        $statuts = ['À faire', 'En cours', 'Terminé'];
+        $statuts = ['To Do', 'Doing', 'Done'];
 
         foreach ($projets as $projetIndex => $projet) {
             foreach ($statuts as $statutIndex => $libelle) {

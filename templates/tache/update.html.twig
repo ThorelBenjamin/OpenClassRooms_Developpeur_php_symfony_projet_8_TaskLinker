@@ -1,0 +1,40 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Tache{% endblock %}
+{% block title_page %}Gestion des droits d'accès{% endblock %}
+
+{% block body %}
+    <div id="content">
+        {{ form_start(form) }}
+
+        <div class="input">
+            {{ form_row(form.titre) }}
+        </div>
+
+        <div class="input">
+            {{ form_row(form.description) }}
+        </div>
+
+        <div class="input">
+            {{ form_row(form.deadline) }}
+        </div>
+
+        <div class="input">
+            {{ form_row(form.statut) }}
+        </div>
+
+        <div class="input">
+            {{ form_row(form.employe) }}
+        </div>
+
+        <br>
+        <button class="button button-submit">Modifier</button>
+        <a href="{{ path('tache.delete', {id: tache.id}) }}" class="delete-task">Supprimer la tâche</a>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+
+
+

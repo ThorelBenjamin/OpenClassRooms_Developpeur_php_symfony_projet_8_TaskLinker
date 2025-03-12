@@ -16,12 +16,12 @@
     <body>
     <div id="main-container">
         <nav>
-            <a href="#" id="logo">
+            <a href="/" id="logo">
                 <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
             </a>
             <ul id="main-menu">
                 <li class="active">
-                    <a href="#">
+                    <a href="/">
                         <i class="fa-solid fa-list-check"></i> Projets
                     </a>
                 </li>
@@ -37,12 +37,15 @@
                 <div id="current-user"></div>
                 <div id="title-page">
                     <div class="flex-header">
-                        <h1>Nom du projet</h1>
+                        <h1>{% block title_page %}Projet{% endblock %}</h1>
                         <div class="user-list">
-                            <div class="avatar">ND</div>
-                            <div class="avatar">DB</div>
+                            {% block user_list %}
+
+                            {% endblock %}
                         </div>
-                        <a class="button" href="#">Modifier</a>
+                        {% block bouton_update %}
+
+                        {% endblock %}
                     </div>
                 </div>
             </header>

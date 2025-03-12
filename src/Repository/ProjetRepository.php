@@ -16,6 +16,13 @@ class ProjetRepository extends ServiceEntityRepository
         parent::__construct($registry, Projet::class);
     }
 
+    /**
+     * @param int $idProjet
+     * @return array
+     */
+
+
+
     //    /**
     //     * @return Projet[] Returns an array of Projet objects
     //     */

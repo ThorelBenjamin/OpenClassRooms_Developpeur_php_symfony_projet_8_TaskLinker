@@ -20,7 +20,7 @@ class Etiquette
 
     #[ORM\ManyToOne(inversedBy: 'etiquettes')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?projet $projet = null;
+    private ?Projet $projet = null;
 
     /**
      * @var Collection<int, tache>

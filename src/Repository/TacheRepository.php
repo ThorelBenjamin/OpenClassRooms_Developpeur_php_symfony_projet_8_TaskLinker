@@ -16,6 +16,17 @@ class TacheRepository extends ServiceEntityRepository
         parent::__construct($registry, Tache::class);
     }
 
+    public function findByProjetOrderedByStatut(int $projetId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.statut', 's')
+            ->where('t.projet = :projetId')
+            ->setParameter('projetId', $projetId)
+            ->orderBy('s.libelle', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Tache[] Returns an array of Tache objects
     //     */

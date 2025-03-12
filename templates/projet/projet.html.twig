@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projet{% endblock %}
+{% block title_page %}{{ projet.nom }}{% endblock %}
+{% block user_list %}
+    {% for employe in projet.employes %}
+        {% set initials = employe.prenom|first ~ employe.nom|first %}
+        <div class="avatar">{{ initials|upper }}</div>
+    {% endfor %}
+{% endblock %}
+{% block bouton_update %}
+    <a class="button" href="#">Modifier</a>
+{% endblock %}
+{% block body %}
+
+    <div id="content">
+        <div id="tasks-container">
+                <div class="task-column">
+                    <h2>To Do</h2>
+                    <div class="tasks-list">
+                        {% for tache in taches|filter(t => t.statut.libelle == 'To Do') %}
+                        <a class="task" href="{{ path('tache.update', {'id': tache.id}) }}">
+                            <h3>{{ tache.titre }}</h3>
+                            <p>{{ tache.description }}</p>
+                            <div class="task-infos">
+                                <div class="task-deadline">
+                                    <i class="fa-regular fa-calendar"></i> {{ tache.deadline|date('d/m/Y') }}
+                                </div>
+                                <div class="mini-user">
+                                    {% if tache.employe is not null %}
+                                        {% set initials = tache.employe.prenom|first ~ tache.employe.nom|first %}
+                                        {{ initials|upper }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                        <a href="{{ path('tache.add', {'id': projet.id}) }}" class="task-add">
+                            + Ajouter une tâche
+                        </a>
+                    </div>
+                </div>
+
+                <div class="task-column">
+                    <h2>En cours</h2>
+                    <div class="tasks-list">
+                        {% for tache in taches %}
+                            {% if tache.statut.libelle == 'Doing' %}
+                            <a class="task" href="{{ path('tache.update', {'id': tache.id}) }}">
+                                <h3>{{ tache.titre }}</h3>
+                                <p>{{ tache.description }}</p>
+                                <div class="task-infos">
+                                    <div class="task-deadline">
+                                        <i class="fa-regular fa-calendar"></i> {{ tache.deadline|date('d/m/Y') }}
+                                    </div>
+                                    <div class="mini-user">
+                                        {% if tache.employe is not null %}
+                                            {% set initials = tache.employe.prenom|first ~ tache.employe.nom|first %}
+                                            {{ initials|upper }}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </a>
+                        {% endif %}
+                        {% endfor %}
+                        <a href="#" class="task-add">
+                            + Ajouter une tâche
+                        </a>
+                    </div>
+                </div>
+
+                <div class="task-column">
+                    <h2>Done</h2>
+                    <div class="tasks-list">
+                        {% for tache in taches %}
+                        {% if tache.statut.libelle == 'Done' %}
+                        <a class="task" href="{{ path('tache.update', {'id': tache.id}) }}">
+                            <h3>{{ tache.titre }}</h3>
+                            <p>{{ tache.description }}</p>
+                            <div class="task-infos">
+                                <div class="task-deadline">
+                                    <i class="fa-regular fa-calendar"></i> {{ tache.deadline|date('d/m/Y') }}
+                                </div>
+                                <div class="mini-user">
+                                    {% if tache.employe is not null %}
+                                        {% set initials = tache.employe.prenom|first ~ tache.employe.nom|first %}
+                                        {{ initials|upper }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </a>
+                        {% endif %}
+                        {% endfor %}
+                        <a href="/" class="task-add">
+                            + Ajouter une tâche
+                        </a>
+                    </div>
+                </div>
+
+
+        </div>
+    </div>
+{% endblock %}
